@@ -154,24 +154,21 @@ impl InstrumentedClientRequest {
         }
 
         let span = tracer
-            .span_builder(
-                format!(
-                    "{} {}{}{}",
-                    self.request.get_method(),
-                    self.request
-                        .get_uri()
-                        .scheme()
-                        .map(|s| format!("{}://", s.as_str()))
-                        .unwrap_or_else(String::new),
-                    self.request
-                        .get_uri()
-                        .authority()
-                        .map(|s| s.as_str())
-                        .unwrap_or(""),
-                    self.request.get_uri().path()
-                )
-                .as_str(),
-            )
+            .span_builder(format!(
+                "{} {}{}{}",
+                self.request.get_method(),
+                self.request
+                    .get_uri()
+                    .scheme()
+                    .map(|s| format!("{}://", s.as_str()))
+                    .unwrap_or_else(String::new),
+                self.request
+                    .get_uri()
+                    .authority()
+                    .map(|s| s.as_str())
+                    .unwrap_or(""),
+                self.request.get_uri().path()
+            ))
             .with_kind(SpanKind::Client)
             .with_attributes(attributes)
             .start(&tracer);
